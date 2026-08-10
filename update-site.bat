@@ -10,15 +10,18 @@ if errorlevel 1 (
   if defined GITDIR set "GIT=!GITDIR!\resources\app\git\cmd\git.exe"
 )
 
+rem -- clear stale git lock files (left behind when Claude's sandbox commits)
+del /f /q .git\index.lock .git\HEAD.lock .git\objects\maintenance.lock 2>nul
+
 echo Updating your monthly planner site...
-"%GIT%" add index.html
+"%GIT%" add -A
 "%GIT%" commit -m "Monthly planner update"
 "%GIT%" push origin main
 
 echo.
 echo ================================================================
 echo  Done! If no errors above, the site refreshes in about a minute:
-echo  https://poosquad82.github.io/monthly-planner/
+echo  https://poosquad82.github.io/afterhours-monthly-planner/
 echo  (If push failed, open GitHub Desktop and click Commit + Push.)
 echo ================================================================
 pause
