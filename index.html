@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adult Nights & Venue Planner — August 2026</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+:root{--sf:#0072B2;--al:#E69F00;--sc:#009E73;--sm:#CC79A7;--bg:#14161d;--card:#1e222d;--txt:#e8eaf0;--mut:#9aa1b3}
+*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,system-ui,sans-serif;background:var(--bg);color:var(--txt)}
+header{padding:14px 18px 6px}h1{font-size:1.25rem;margin:0}.sub{color:var(--mut);font-size:.85rem;margin:4px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:8px 18px}
+.chip{border:1px solid #3a4152;border-radius:16px;padding:5px 12px;font-size:.8rem;cursor:pointer;background:var(--card);user-select:none}
+.chip.on{background:#2e3648;border-color:#7b87a5}.chip .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+#map{height:380px;margin:6px 18px;border-radius:10px;background:#000}
+main{display:flex;gap:16px;padding:0 18px 30px;flex-wrap:wrap}
+#list{flex:2;min-width:300px}#plan{flex:1;min-width:260px;background:var(--card);border-radius:10px;padding:12px;align-self:flex-start;position:sticky;top:8px}
+.day{margin:16px 0 6px;font-weight:600;color:#c6cde0;border-bottom:1px solid #333a4a;padding-bottom:3px}
+.ev{background:var(--card);border-left:4px solid #555;border-radius:8px;padding:8px 10px;margin:6px 0;font-size:.86rem;display:flex;gap:8px;align-items:flex-start}
+.ev .add{cursor:pointer;font-weight:700;border:1px solid #46506a;border-radius:6px;padding:0 8px;line-height:1.5}
+.ev a{color:#8fb8ff;text-decoration:none}.ev a:hover{text-decoration:underline}
+.flag{font-size:.68rem;border-radius:4px;padding:1px 5px;font-weight:700;margin-left:4px}
+.f21{background:#7a2d3f}.f18{background:#7a5a2d}.fah{background:#2d5a7a}.fev{background:#3d4457}
+h2{font-size:1rem;margin:4px 0 8px}.pi{font-size:.82rem;margin:5px 0;display:flex;gap:6px;align-items:center}
+.pi .rm{cursor:pointer;color:#e08b8b}.route{display:inline-block;margin:6px 0;font-size:.8rem;color:#8fb8ff}
+.note{color:var(--mut);font-size:.72rem;margin-top:10px}
+.warn{color:#e0c37a;font-size:.78rem;padding:0 18px}
+.lbl{color:var(--mut);font-size:.72rem;align-self:center;margin-right:-2px}
+</style>
+</head>
+<body>
+<header><h1>Adult Nights &amp; Venue Planner — August 2026</h1>
+<p class="sub">SF · Alameda · Santa Clara · San Mateo — museums, zoos, wineries, oddities. ⭐ filter defaults to adult/after-hours only. Double-click or ＋ an event to build your plan.</p></header>
+<div class="chips" id="chips"></div>
+<div class="chips" id="weekChips"></div>
+<div id="map"></div><p class="warn" id="mapwarn" style="display:none">Map failed to load — list still works.</p>
+<main><div id="list"></div>
+<div id="plan"><h2>My plan</h2><div id="planItems"><p class="note">Nothing queued yet.</p></div>
+<p class="note">Picks reset on reload (no browser storage). Routes open in Google Maps and ask for your start point.</p></div></main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const COUNTY={SF:{n:"San Francisco",c:"#0072B2"},AL:{n:"Alameda",c:"#E69F00"},SC:{n:"Santa Clara",c:"#009E73"},SM:{n:"San Mateo",c:"#CC79A7"}};
+// flag: 21 = 21+, 18 = 18+, AH = after-hours/evening special, EV = general/daytime
+const CATS={mus:"Museums & science",win:"Wineries & spirits",odd:"Odd & quirky",obs:"Night sky",par:"Parties & music",poi:"Gardens & POI",lib:"Libraries"};
+const V={cal:["California Academy of Sciences","San Francisco",[37.7699,-122.4661],"mus"],exp:["Exploratorium","San Francisco",[37.8017,-122.3973],"mus"],sfm:["SFMOMA","San Francisco",[37.7857,-122.4011],"mus"],aud:["Audium","San Francisco",[37.7884,-122.4229],"odd"],dy:["de Young Museum","San Francisco",[37.7715,-122.4687],"mus"],tiw:["Treasure Island Wines","San Francisco",[37.8231,-122.3712],"win"],hor:["USS Hornet","Alameda",[37.7726,-122.3025],"mus"],cha:["Chabot Space & Science Center","Oakland",[37.8191,-122.1811],"obs"],omca:["Oakland Museum of California","Oakland",[37.7986,-122.2647],"mus"],que:["Que Rico","Oakland",[37.8058,-122.2704],"par"],nil:["Niles Essanay Silent Film Museum","Fremont",[37.5776,-121.9812],"odd"],mcg:["McGrail Vineyards","Livermore",[37.657,-121.703],"win"],wen:["Wente Vineyards","Livermore",[37.6335,-121.7568],"win"],con:["Concannon Vineyard","Livermore",[37.6608,-121.748],"win"],fen:["Fenestra Winery","Livermore",[37.648,-121.737],"win"],dan:["Dante Robere Vineyards","Livermore",[37.626,-121.704],"win"],lick:["Lick Observatory","Mt. Hamilton (San Jose)",[37.3414,-121.6429],"obs"],fil:["Filoli","Woodside",[37.4700,-122.3103],"poi"],cur:["CuriOdyssey","San Mateo",[37.5900,-122.3170],"mus"],fai:["Children's Fairyland","Oakland",[37.8081,-122.2597],"odd"],clo:["Clos LaChance","San Martin",[37.088,-121.628],"win"],sml:["San Mateo Main Library","San Mateo",[37.5630,-122.3255],"lib"],alc:["Alcatraz Landing (Pier 33)","San Francisco",[37.8072,-122.4054],"poi"],tri:["Triton Museum of Art","Santa Clara",[37.3541,-121.9552],"mus"]};
+const E=[
+["2026-08-12","5:00 PM","Summer Nights at Filoli","fil","SM","AH","https://filoli.org/summer/"],
+["2026-08-13","5:00 PM","Summer Nights at Filoli","fil","SM","AH","https://filoli.org/summer/"],
+["2026-08-13","6:00 PM","NightLife: R&B Throwback","cal","SF","21","https://www.calacademy.org/nightlife/nightlife-r-n-b-throwback"],
+["2026-08-13","6:00 PM","After Dark: Unplug and Play","exp","SF","18","https://www.exploratorium.edu/visit/calendar/after-dark-unplug-play-aug2026"],
+["2026-08-13","6:00 PM","Thursday Night: drawing in the galleries","sfm","SF","AH","https://www.sfmoma.org/visit/thursday-nights/"],
+["2026-08-13","8:00 PM","Audium: Hidden Currents","aud","SF","AH","https://www.audium.org/"],
+["2026-08-13","6:00 PM","Time for Wine free concert (21+ facility)","clo","SC","AH","https://www.clos.com/Visiting/Events/Time-for-Wine-Concerts"],
+["2026-08-14","5:00 PM","Friday Nights at OMCA — Ashley Mehta","omca","AL","AH","https://museumca.org/about-friday-nights-at-omca-with-off-the-grid/"],
+["2026-08-14","5:55 PM","Alcatraz Night Tour (runs Tue–Sat)","alc","SF","AH","https://alcatrazcitycruises.com/tickets/alcatraz-night-tour"],
+["2026-08-14","6:00 PM","Fairyland for Grownups — 14th annual","fai","AL","21","https://fairyland.org/fairyland-for-grownups/"],
+["2026-08-14","6:00 PM","Friday Night Live (music + wine)","mcg","AL","AH","https://mcgrailvineyards.com/events-current/"],
+["2026-08-14","7:30 PM","Free Telescope Viewing","cha","AL","AH","https://chabotspace.org/programs/free-telescope-viewings/"],
+["2026-08-14","8:00 PM","Audium: Hidden Currents","aud","SF","AH","https://www.audium.org/"],
+["2026-08-15","9:00 AM","VIP Behind the Scenes Tour","hor","AL","EV","https://uss-hornet.org/event/vip-behind-the-scenes-saturday-tour-6/"],
+["2026-08-15","Daytime","Free Saturday (Bay Area residents)","dy","SF","EV","https://www.famsf.org/"],
+["2026-08-15","Evening","Fenestra 50th Anniversary Wine Dinner","fen","AL","AH","https://www.fenestrawinery.com/events"],
+["2026-08-15","7:00 PM","South Seas Swing (tiki/swing night)","hor","AL","AH","https://uss-hornet.org/event/south-seas-swing-2026/"],
+["2026-08-15","7:30 PM","Saturday Night Silent Films (live piano)","nil","AL","AH","https://nilesfilmmuseum.org/"],
+["2026-08-15","7:30 PM","Free Telescope Viewing","cha","AL","AH","https://chabotspace.org/programs/free-telescope-viewings/"],
+["2026-08-15","8:00 PM","Audium: Hidden Currents","aud","SF","AH","https://www.audium.org/"],
+["2026-08-16","12:30 PM","Beyond Rescue 8th Anniversary (rescue benefit)","tiw","SF","EV","https://www.eventbrite.com/e/1994759062052"],
+["2026-08-16","2:00 PM","Toss the Tusk — ivory ban anniversary","cur","SM","EV","https://curiodyssey.org/event/toss-the-tusk-2026-celebrating-10-years-of-californias-ivory-ban/"],
+["2026-08-16","Afternoon","Petty Theft — Tom Petty tribute","wen","AL","AH","https://www.wentevineyards.com/"],
+["2026-08-16","5:00 PM","Oakland Pride After Party (21+)","que","AL","21","https://www.eventbrite.com/e/1994380164760"],
+["2026-08-18","10:00 AM","VIP Behind the Scenes Tour","hor","AL","EV","https://uss-hornet.org/event/vip-behind-the-scenes-tuesday-tour-26/"],
+["2026-08-19","5:00 PM","Summer Nights at Filoli","fil","SM","AH","https://filoli.org/summer/"],
+["2026-08-20","5:00 PM","Summer Nights at Filoli","fil","SM","AH","https://filoli.org/summer/"],
+["2026-08-20","6:00 PM","NightLife (wander after dark)","cal","SF","21","https://www.calacademy.org/nightlife/nightlife-august-20"],
+["2026-08-20","6:00 PM","After Dark: Extraterrestrial","exp","SF","18","https://www.exploratorium.edu/visit/calendar/after-dark-extraterrestrial"],
+["2026-08-20","6:00 PM","de Young Party (verify on FAMSF calendar)","dy","SF","AH","https://www.famsf.org/calendar"],
+["2026-08-20","6:00 PM","Thursday Night: talk + performance","sfm","SF","AH","https://www.sfmoma.org/visit/thursday-nights/"],
+["2026-08-20","8:00 PM","Audium: Hidden Currents","aud","SF","AH","https://www.audium.org/"],
+["2026-08-20","6:00 PM","Time for Wine free concert (21+ facility)","clo","SC","AH","https://www.clos.com/Visiting/Events/Time-for-Wine-Concerts"],
+["2026-08-21","5:00 PM","Friday Nights at OMCA","omca","AL","AH","https://museumca.org/about-friday-nights-at-omca-with-off-the-grid/"],
+["2026-08-21","5:55 PM","Alcatraz Night Tour (runs Tue–Sat)","alc","SF","AH","https://alcatrazcitycruises.com/tickets/alcatraz-night-tour"],
+["2026-08-21","6:00 PM","Adult Bingo Night (register)","sml","SM","AH","https://sanmateopublic.libcal.com/calendar/adults-teens"],
+["2026-08-21","7:30 PM","Free Telescope Viewing","cha","AL","AH","https://chabotspace.org/programs/free-telescope-viewings/"],
+["2026-08-21","8:00 PM","Audium: Hidden Currents","aud","SF","AH","https://www.audium.org/"],
+["2026-08-22","9:00 AM","Warhammer on the Hornet! (thru Sun)","hor","AL","EV","https://uss-hornet.org/event/warhammer-on-the-hornet/"],
+["2026-08-22","Daytime","Free Saturday (Bay Area residents)","dy","SF","EV","https://www.famsf.org/"],
+["2026-08-22","12:00 PM","Dante Robere Summer Club Pickup (thru Sun)","dan","AL","AH","https://www.lvwine.org/events/"],
+["2026-08-22","7:30 PM","Saturday Night Silent Films (live piano)","nil","AL","AH","https://nilesfilmmuseum.org/"],
+["2026-08-22","7:30 PM","Free Telescope Viewing","cha","AL","AH","https://chabotspace.org/programs/free-telescope-viewings/"],
+["2026-08-22","8:00 PM","Audium: Hidden Currents","aud","SF","AH","https://www.audium.org/"],
+["2026-08-23","6:00 PM","Lick Observatory After Hours","lick","SC","AH","https://www.eventbrite.com/e/1990676644431"],
+["2026-08-26","5:00 PM","Summer Nights at Filoli","fil","SM","AH","https://filoli.org/summer/"],
+["2026-08-27","5:00 PM","Summer Nights at Filoli","fil","SM","AH","https://filoli.org/summer/"],
+["2026-08-27","5:30 PM","Honkytonk Heroes (country on the lawn)","con","AL","AH","https://www.lvwine.org/events/"],
+["2026-08-27","6:00 PM","NightLife: Disco","cal","SF","21","https://www.calacademy.org/nightlife/nightlife-disco"],
+["2026-08-27","6:00 PM","After Dark (theme TBA)","exp","SF","18","https://www.exploratorium.edu/visit/calendar/after-dark"],
+["2026-08-27","6:00 PM","Thursday Night: discussion + performance","sfm","SF","AH","https://www.sfmoma.org/visit/thursday-nights/"],
+["2026-08-27","6:00 PM","Time for Wine free concert (21+ facility)","clo","SC","AH","https://www.clos.com/Visiting/Events/Time-for-Wine-Concerts"],
+["2026-08-27","8:00 PM","Audium: Hidden Currents (final night)","aud","SF","AH","https://www.audium.org/"],
+["2026-08-28","5:00 PM","Friday Nights at OMCA","omca","AL","AH","https://museumca.org/about-friday-nights-at-omca-with-off-the-grid/"],
+["2026-08-28","5:55 PM","Alcatraz Night Tour (runs Tue–Sat)","alc","SF","AH","https://alcatrazcitycruises.com/tickets/alcatraz-night-tour"],
+["2026-08-28","6:00 PM","Triton Friday Evenings — series opener","tri","SC","AH","https://www.tritonmuseum.org/events"],
+["2026-08-28","7:30 PM","Free Telescope Viewing","cha","AL","AH","https://chabotspace.org/programs/free-telescope-viewings/"],
+["2026-08-29","Daytime","Free Saturday (Bay Area residents)","dy","SF","EV","https://www.famsf.org/"],
+["2026-08-29","5:00 PM","Sips on the Ship! (tasting evening)","hor","AL","AH","https://uss-hornet.org/event/sips-on-the-ship/"],
+["2026-08-29","7:30 PM","Saturday Night Silent Films (live piano)","nil","AL","AH","https://nilesfilmmuseum.org/"],
+["2026-08-29","7:30 PM","Free Telescope Viewing","cha","AL","AH","https://chabotspace.org/programs/free-telescope-viewings/"]
+].map(([d,t,n,vk,co,f,u],i)=>({id:i,d,t,n,vk,v:V[vk][0],city:V[vk][1],ll:V[vk][2],cat:V[vk][3],co,f,u}));
+const WEEKS=[{id:"w1",n:"Aug 10–16",from:"2026-08-10",to:"2026-08-16"},{id:"w2",n:"Aug 17–23",from:"2026-08-17",to:"2026-08-23"},{id:"w3",n:"Aug 24–31",from:"2026-08-24",to:"2026-08-31"}];
+const state={co:{SF:true,AL:true,SC:true,SM:true},cat:Object.fromEntries(Object.keys(CATS).map(k=>[k,true])),adultOnly:true,week:null,plan:[]};
+const FLAB={21:["21+","f21"],18:["18+","f18"],AH:["After hours","fah"],EV:["General","fev"]};
+const isAdult=e=>e.f!=="EV";
+function fmtDay(d){return new Date(d+"T12:00:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}
+function inWeek(e){if(!state.week)return true;const w=WEEKS.find(x=>x.id===state.week);return e.d>=w.from&&e.d<=w.to}
+function visible(){return E.filter(e=>state.co[e.co]&&state.cat[e.cat]&&(!state.adultOnly||isAdult(e))&&inWeek(e))}
+const chipsEl=document.getElementById("chips"),weekEl=document.getElementById("weekChips");
+function drawChips(){chipsEl.innerHTML="";const v=visible();
+ for(const k in COUNTY){const n=v.filter(e=>e.co===k).length;const c=document.createElement("div");
+  c.className="chip"+(state.co[k]?" on":"");c.innerHTML=`<span class="dot" style="background:${COUNTY[k].c}"></span>${COUNTY[k].n} (${n})`;
+  c.onclick=()=>{state.co[k]=!state.co[k];render()};chipsEl.appendChild(c)}
+ const a=document.createElement("div");a.className="chip"+(state.adultOnly?" on":"");
+ a.textContent="⭐ Adult / after-hours only";a.onclick=()=>{state.adultOnly=!state.adultOnly;render()};chipsEl.appendChild(a);
+ for(const k in CATS){const n=v.filter(e=>e.cat===k).length;const c=document.createElement("div");
+  c.className="chip"+(state.cat[k]?" on":"");c.textContent=`${CATS[k]} (${n})`;
+  c.onclick=()=>{state.cat[k]=!state.cat[k];render()};chipsEl.appendChild(c)}
+ weekEl.innerHTML='<span class="lbl">Week:</span>';
+ const all=document.createElement("div");all.className="chip"+(state.week===null?" on":"");all.textContent="All month";
+ all.onclick=()=>{state.week=null;render()};weekEl.appendChild(all);
+ WEEKS.forEach(w=>{const c=document.createElement("div");c.className="chip"+(state.week===w.id?" on":"");
+  c.textContent=w.n;c.onclick=()=>{state.week=state.week===w.id?null:w.id;render()};weekEl.appendChild(c)})}
+let map,layer;try{
+ map=L.map("map").setView([37.62,-122.15],9);
+ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap"}).addTo(map);
+ layer=L.layerGroup().addTo(map);
+}catch(err){document.getElementById("mapwarn").style.display="block"}
+function drawMap(){if(!map)return;layer.clearLayers();const byVenue={};
+ visible().forEach(e=>{(byVenue[e.vk]=byVenue[e.vk]||[]).push(e)});
+ Object.values(byVenue).forEach(evs=>{const e=evs[0];
+  const m=L.circleMarker(e.ll,{radius:9,fillColor:COUNTY[e.co].c,fillOpacity:.95,color:"#fff",weight:2});
+  m.bindPopup(`<b>${e.v}</b><br>${e.city}<br>`+evs.map(x=>`${fmtDay(x.d)} ${x.t} — <a href="${x.u}" target="_blank">${x.n}</a> <a href="#" onclick="addPlan(${x.id});return false">＋plan</a>`).join("<br>"));
+  m.addTo(layer)})}
+function drawList(){const el=document.getElementById("list");el.innerHTML="";let last="";
+ visible().sort((a,b)=>a.d.localeCompare(b.d)).forEach(e=>{
+  if(e.d!==last){last=e.d;const h=document.createElement("div");h.className="day";h.textContent=fmtDay(e.d);el.appendChild(h)}
+  const f=FLAB[e.f];const div=document.createElement("div");div.className="ev";div.style.borderLeftColor=COUNTY[e.co].c;
+  div.innerHTML=`<span class="add" title="Add to plan">＋</span><div><b>${e.t}</b> — <a href="${e.u}" target="_blank">${e.n}</a><span class="flag ${f[1]}">${f[0]}</span><br><span style="color:var(--mut)">${e.v}, ${e.city} · <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.v+" "+e.city)}" target="_blank">map</a></span></div>`;
+  div.querySelector(".add").onclick=()=>addPlan(e.id);div.ondblclick=()=>addPlan(e.id);el.appendChild(div)})}
+// calendar export — Google (URL) + Apple/Outlook (.ics download)
+function evTimes(e){const m=e.t.match(/(\d+):(\d+)\s*(AM|PM)/i);let h=18,min=0;
+ if(m){h=+m[1]%12+(/pm/i.test(m[3])?12:0);min=+m[2]}
+ else if(/daytime/i.test(e.t))h=10;else if(/afternoon/i.test(e.t))h=14;else if(/evening/i.test(e.t))h=18;
+ const p=n=>String(n).padStart(2,"0");const[Y,Mo,D]=e.d.split("-");
+ const s=`${Y}${Mo}${D}T${p(h)}${p(min)}00`;let eh=h+3;let ed=e.d;
+ if(eh>=24){eh-=24;const nd=new Date(e.d+"T12:00:00");nd.setDate(nd.getDate()+1);ed=nd.toISOString().slice(0,10)}
+ const[Y2,Mo2,D2]=ed.split("-");return[s,`${Y2}${Mo2}${D2}T${p(eh)}${p(min)}00`]}
+function gcalUrl(e){const[s,en]=evTimes(e);
+ return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(e.n+" — "+e.v)}&dates=${s}/${en}&location=${encodeURIComponent(e.v+", "+e.city+", CA")}&details=${encodeURIComponent(e.u)}`}
+function icsEsc(x){return x.replace(/[,;\\]/g,m=>"\\"+m)}
+function downloadIcs(evs,fname){const now=new Date().toISOString().replace(/[-:]/g,"").slice(0,15)+"Z";
+ const body=evs.map(e=>{const[s,en]=evTimes(e);
+  return["BEGIN:VEVENT",`UID:${e.id}-${s}@monthly-planner`,`DTSTAMP:${now}`,`DTSTART:${s}`,`DTEND:${en}`,
+  `SUMMARY:${icsEsc(e.n+" — "+e.v)}`,`LOCATION:${icsEsc(e.v+", "+e.city+", CA")}`,`DESCRIPTION:${icsEsc(e.u)}`,"END:VEVENT"].join("\r\n")}).join("\r\n");
+ const ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Monthly Planner//EN",body,"END:VCALENDAR"].join("\r\n");
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([ics],{type:"text/calendar"}));
+ a.download=fname;a.click();URL.revokeObjectURL(a.href)}
+function addPlan(id){if(!state.plan.includes(id)){state.plan.push(id);drawPlan()}}
+function rmPlan(id){state.plan=state.plan.filter(x=>x!==id);drawPlan()}
+function drawPlan(){const el=document.getElementById("planItems");
+ if(!state.plan.length){el.innerHTML='<p class="note">Nothing queued yet.</p>';return}
+ const byDay={};state.plan.map(i=>E[i]).sort((a,b)=>(a.d+a.t).localeCompare(b.d+b.t)).forEach(e=>{(byDay[e.d]=byDay[e.d]||[]).push(e)});
+ el.innerHTML="";for(const d in byDay){const evs=byDay[d];
+  el.insertAdjacentHTML("beforeend",`<div class="day">${fmtDay(d)}</div>`);
+  evs.forEach(e=>{const div=document.createElement("div");div.className="pi";
+   div.innerHTML=`<span class="rm" title="Remove">✕</span><span><b>${e.t}</b> <a href="${e.u}" target="_blank">${e.n}</a> · ${e.v} · <a href="${e.u}" target="_blank">Tickets ↗</a> · <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.v+" "+e.city)}" target="_blank">Map ↗</a> · <a href="${gcalUrl(e)}" target="_blank" title="Add to Google Calendar">GCal ＋</a> · <a href="#" class="ics1" title="Download .ics for Apple Calendar">.ics</a></span>`;
+   div.querySelector(".ics1").onclick=(ev)=>{ev.preventDefault();downloadIcs([e],e.n.replace(/[^\w]+/g,"-").slice(0,40)+".ics")};
+   div.querySelector(".rm").onclick=()=>rmPlan(e.id);el.appendChild(div)});
+  const stops=evs.map(e=>encodeURIComponent(e.v+", "+e.city+", CA"));
+  const dest=stops[stops.length-1],wp=stops.slice(0,-1).join("%7C");
+  el.insertAdjacentHTML("beforeend",`<a class="route" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=${dest}${wp?"&waypoints="+wp:""}">🗺 Route this day</a>`)}
+ const ex=document.createElement("a");ex.className="route";ex.href="#";ex.textContent="📅 Download whole plan (.ics — Apple/Outlook)";
+ ex.onclick=(ev)=>{ev.preventDefault();downloadIcs(state.plan.map(i=>E[i]),"my-plan-august-2026.ics")};el.appendChild(ex)}
+function render(){drawChips();drawMap();drawList()}
+window.addPlan=addPlan;render();drawPlan();
+</script>
+</body>
+</html>
