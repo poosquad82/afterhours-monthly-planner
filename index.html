@@ -41,10 +41,12 @@ h2{font-size:1rem;margin:4px 0 8px}.pi{font-size:.82rem;margin:5px 0;display:fle
 const COUNTY={SF:{n:"San Francisco",c:"#0072B2"},AL:{n:"Alameda",c:"#E69F00"},SC:{n:"Santa Clara",c:"#009E73"},SM:{n:"San Mateo",c:"#CC79A7"}};
 // flag: 21 = 21+, 18 = 18+, AH = after-hours/evening special, EV = general/daytime
 const CATS={mus:"Museums & science",win:"Wineries & spirits",odd:"Odd & quirky",obs:"Night sky",par:"Parties & music",poi:"Gardens & POI",lib:"Libraries",lec:"Lectures & nerd nights"};
-const V={cal:["California Academy of Sciences","San Francisco",[37.7699,-122.4661],"mus"],exp:["Exploratorium","San Francisco",[37.8017,-122.3973],"mus"],sfm:["SFMOMA","San Francisco",[37.7857,-122.4011],"mus"],aud:["Audium","San Francisco",[37.7884,-122.4229],"odd"],dy:["de Young Museum","San Francisco",[37.7715,-122.4687],"mus"],tiw:["Treasure Island Wines","San Francisco",[37.8231,-122.3712],"win"],hor:["USS Hornet","Alameda",[37.7726,-122.3025],"mus"],cha:["Chabot Space & Science Center","Oakland",[37.8191,-122.1811],"obs"],omca:["Oakland Museum of California","Oakland",[37.7986,-122.2647],"mus"],que:["Que Rico","Oakland",[37.8058,-122.2704],"par"],nil:["Niles Essanay Silent Film Museum","Fremont",[37.5776,-121.9812],"odd"],mcg:["McGrail Vineyards","Livermore",[37.657,-121.703],"win"],wen:["Wente Vineyards","Livermore",[37.6335,-121.7568],"win"],con:["Concannon Vineyard","Livermore",[37.6608,-121.748],"win"],fen:["Fenestra Winery","Livermore",[37.648,-121.737],"win"],dan:["Dante Robere Vineyards","Livermore",[37.626,-121.704],"win"],lick:["Lick Observatory","Mt. Hamilton (San Jose)",[37.3414,-121.6429],"obs"],fil:["Filoli","Woodside",[37.4700,-122.3103],"poi"],cur:["CuriOdyssey","San Mateo",[37.5900,-122.3170],"mus"],fai:["Children's Fairyland","Oakland",[37.8081,-122.2597],"odd"],clo:["Clos LaChance","San Martin",[37.088,-121.628],"win"],sml:["San Mateo Main Library","San Mateo",[37.5630,-122.3255],"lib"],alc:["Alcatraz Landing (Pier 33)","San Francisco",[37.8072,-122.4054],"poi"],tri:["Triton Museum of Art","Santa Clara",[37.3541,-121.9552],"mus"],upt:["The Uptown Nightclub","Oakland",[37.8079,-122.2687],"lec"]};
+const V={cal:["California Academy of Sciences","San Francisco",[37.7699,-122.4661],"mus"],exp:["Exploratorium","San Francisco",[37.8017,-122.3973],"mus"],sfm:["SFMOMA","San Francisco",[37.7857,-122.4011],"mus"],aud:["Audium","San Francisco",[37.7884,-122.4229],"odd"],dy:["de Young Museum","San Francisco",[37.7715,-122.4687],"mus"],tiw:["Treasure Island Wines","San Francisco",[37.8231,-122.3712],"win"],hor:["USS Hornet","Alameda",[37.7726,-122.3025],"mus"],cha:["Chabot Space & Science Center","Oakland",[37.8191,-122.1811],"obs"],omca:["Oakland Museum of California","Oakland",[37.7986,-122.2647],"mus"],que:["Que Rico","Oakland",[37.8058,-122.2704],"par"],nil:["Niles Essanay Silent Film Museum","Fremont",[37.5776,-121.9812],"odd"],mcg:["McGrail Vineyards","Livermore",[37.657,-121.703],"win"],wen:["Wente Vineyards","Livermore",[37.6335,-121.7568],"win"],con:["Concannon Vineyard","Livermore",[37.6608,-121.748],"win"],fen:["Fenestra Winery","Livermore",[37.648,-121.737],"win"],dan:["Dante Robere Vineyards","Livermore",[37.626,-121.704],"win"],lick:["Lick Observatory","Mt. Hamilton (San Jose)",[37.3414,-121.6429],"obs"],fil:["Filoli","Woodside",[37.4700,-122.3103],"poi"],cur:["CuriOdyssey","San Mateo",[37.5900,-122.3170],"mus"],fai:["Children's Fairyland","Oakland",[37.8081,-122.2597],"odd"],clo:["Clos LaChance","San Martin",[37.088,-121.628],"win"],sml:["San Mateo Main Library","San Mateo",[37.5630,-122.3255],"lib"],alc:["Alcatraz Landing (Pier 33)","San Francisco",[37.8072,-122.4054],"poi"],tri:["Triton Museum of Art","Santa Clara",[37.3541,-121.9552],"mus"],upt:["The Uptown Nightclub","Oakland",[37.8079,-122.2687],"lec"],cwc:["Commonwealth Club","San Francisco",[37.7936,-122.3930],"lec"],kep:["Kepler's Books","Menlo Park",[37.4530,-122.1817],"lec"],ric:["Rickshaw Stop","San Francisco",[37.7766,-122.4212],"lec"],mar:["Marina Green","San Francisco",[37.8060,-122.4430],"par"],stg:["Stern Grove","San Francisco",[37.7362,-122.4771],"par"]};
 const E=[
 ["2026-08-12","5:00 PM","Summer Nights at Filoli","fil","SM","AH","https://filoli.org/summer/"],
 ["2026-08-13","5:00 PM","Summer Nights at Filoli","fil","SM","AH","https://filoli.org/summer/"],
+["2026-08-12","6:00 PM","Kepler's: Joseph Ogilvy — Tin Can Coast","kep","SM","AH","https://www.keplers.org/upcoming-events-internal/joseph-ogilvy"],
+["2026-08-13","6:00 PM","CW Club: Ninety-Two — The Silent Revolt","cwc","SF","AH","https://www.commonwealthclub.org/events/2026-08-13/ninety-two-silent-revolt-no-one-saw-coming"],
 ["2026-08-13","6:00 PM","NightLife: R&B Throwback","cal","SF","21","https://www.calacademy.org/nightlife/nightlife-r-n-b-throwback"],
 ["2026-08-13","6:00 PM","After Dark: Unplug and Play","exp","SF","18","https://www.exploratorium.edu/visit/calendar/after-dark-unplug-play-aug2026"],
 ["2026-08-13","6:00 PM","Thursday Night: drawing in the galleries","sfm","SF","AH","https://www.sfmoma.org/visit/thursday-nights/"],
@@ -58,6 +60,8 @@ const E=[
 ["2026-08-14","8:00 PM","Audium: Hidden Currents","aud","SF","AH","https://www.audium.org/"],
 ["2026-08-15","9:00 AM","VIP Behind the Scenes Tour","hor","AL","EV","https://uss-hornet.org/event/vip-behind-the-scenes-saturday-tour-6/"],
 ["2026-08-15","Daytime","Free Saturday (Bay Area residents)","dy","SF","EV","https://www.famsf.org/"],
+["2026-08-15","2:00 PM","Stern Grove Big Picnic: Public Enemy (free lottery)","stg","SF","EV","https://sf.funcheap.com/city-guide/stern-grove-festival-drops-epic-2026-lineup/"],
+["2026-08-16","2:00 PM","Stern Grove finale: Al Green + Goapele (free lottery)","stg","SF","EV","https://sf.funcheap.com/city-guide/stern-grove-festival-drops-epic-2026-lineup/"],
 ["2026-08-15","Evening","Fenestra 50th Anniversary Wine Dinner","fen","AL","AH","https://www.fenestrawinery.com/events"],
 ["2026-08-15","7:00 PM","South Seas Swing (tiki/swing night)","hor","AL","AH","https://uss-hornet.org/event/south-seas-swing-2026/"],
 ["2026-08-15","7:30 PM","Saturday Night Silent Films (live piano)","nil","AL","AH","https://nilesfilmmuseum.org/"],
@@ -68,6 +72,12 @@ const E=[
 ["2026-08-16","Afternoon","Petty Theft — Tom Petty tribute","wen","AL","AH","https://www.wentevineyards.com/"],
 ["2026-08-16","5:00 PM","Oakland Pride After Party (21+)","que","AL","21","https://www.eventbrite.com/e/1994380164760"],
 ["2026-08-18","10:00 AM","VIP Behind the Scenes Tour","hor","AL","EV","https://uss-hornet.org/event/vip-behind-the-scenes-tuesday-tour-26/"],
+["2026-08-18","5:30 PM","CW Club: AI Thinking Microscope","cwc","SF","AH","https://www.commonwealthclub.org/events/2026-08-18/giving-scientists-superpowers-how-ai-powered-thinking-microscope-fast-tracking"],
+["2026-08-18","6:00 PM","CW Club: Rep. Huffman on Christian Nationalism","cwc","SF","AH","https://www.commonwealthclub.org/events/2026-08-18/congressman-jared-huffman-fight-save-democracy-christian-nationalism"],
+["2026-08-18","7:00 PM","Nerd Nite SF #163: Caving, Gin & Tonic, Photographing the Internet","ric","SF","21","https://wl.eventim.us/event/nerd-nite-sf-163/699215?afflky=RickshawStop"],
+["2026-08-19","5:30 PM","CW Club: The Future of Meat","cwc","SF","AH","https://www.commonwealthclub.org/events/2026-08-19/future-meat-technology-sustainability-and-meats-tomorrow"],
+["2026-08-19","7:00 PM","Kepler's: Andrew Sean Greer (Pulitzer, Less)","kep","SM","AH","https://www.keplers.org/upcoming-events-internal/andrew-sean-greer-coco"],
+["2026-08-20","7:00 PM","Kepler's: Bora Lee Reed — Song for Another Home","kep","SM","AH","https://www.keplers.org/upcoming-events-internal/bora-lee-reed"],
 ["2026-08-19","5:00 PM","Summer Nights at Filoli","fil","SM","AH","https://filoli.org/summer/"],
 ["2026-08-20","5:00 PM","Summer Nights at Filoli","fil","SM","AH","https://filoli.org/summer/"],
 ["2026-08-20","6:00 PM","NightLife (wander after dark)","cal","SF","21","https://www.calacademy.org/nightlife/nightlife-august-20"],
@@ -79,6 +89,8 @@ const E=[
 ["2026-08-21","5:00 PM","Friday Nights at OMCA","omca","AL","AH","https://museumca.org/about-friday-nights-at-omca-with-off-the-grid/"],
 ["2026-08-21","5:55 PM","Alcatraz Night Tour (runs Tue–Sat)","alc","SF","AH","https://alcatrazcitycruises.com/tickets/alcatraz-night-tour"],
 ["2026-08-21","6:00 PM","Adult Bingo Night (register)","sml","SM","AH","https://sanmateopublic.libcal.com/calendar/adults-teens"],
+["2026-08-21","6:00 PM","Kepler's: Chang-rae Lee — A Tender Age","kep","SM","AH","https://www.keplers.org/upcoming-events-internal/chang-rae-lee"],
+["2026-08-21","Sunset","Sundown Cinema: The Parent Trap (free)","mar","SF","AH","https://sf.funcheap.com/event-series/sundown-cinema/"],
 ["2026-08-21","7:30 PM","Free Telescope Viewing","cha","AL","AH","https://chabotspace.org/programs/free-telescope-viewings/"],
 ["2026-08-21","8:00 PM","Audium: Hidden Currents","aud","SF","AH","https://www.audium.org/"],
 ["2026-08-22","9:00 AM","Warhammer on the Hornet! (thru Sun)","hor","AL","EV","https://uss-hornet.org/event/warhammer-on-the-hornet/"],
@@ -88,6 +100,10 @@ const E=[
 ["2026-08-22","7:30 PM","Free Telescope Viewing","cha","AL","AH","https://chabotspace.org/programs/free-telescope-viewings/"],
 ["2026-08-22","8:00 PM","Audium: Hidden Currents","aud","SF","AH","https://www.audium.org/"],
 ["2026-08-23","6:00 PM","Lick Observatory After Hours","lick","SC","AH","https://www.eventbrite.com/e/1990676644431"],
+["2026-08-24","6:00 PM","CW Club: The Rise of the Nerd Reich","cwc","SF","AH","https://www.commonwealthclub.org/events/2026-08-24/gil-duran-and-wajahat-ali-rise-nerd-reich"],
+["2026-08-25","5:30 PM","CW Club: The Wisdom of The Odyssey","cwc","SF","AH","https://www.commonwealthclub.org/events/2026-08-25/wisdom-odyssey-worldwide-phenomenon-behind-3000-year-old-story"],
+["2026-08-26","5:30 PM","CW Club: US–Iran Conflict & Energy Markets","cwc","SF","AH","https://www.commonwealthclub.org/events/2026-08-26/us-iran-conflict-and-energy-markets"],
+["2026-08-26","6:00 PM","CW Club: Victoria Yeager — The Right Stuff","cwc","SF","AH","https://www.commonwealthclub.org/events/2026-08-26/victoria-yeager-chuck-yeager-had-right-stuff"],
 ["2026-08-26","5:00 PM","Summer Nights at Filoli","fil","SM","AH","https://filoli.org/summer/"],
 ["2026-08-27","5:00 PM","Summer Nights at Filoli","fil","SM","AH","https://filoli.org/summer/"],
 ["2026-08-27","5:30 PM","Honkytonk Heroes (country on the lawn)","con","AL","AH","https://www.lvwine.org/events/"],
@@ -95,6 +111,8 @@ const E=[
 ["2026-08-27","6:00 PM","After Dark (theme TBA)","exp","SF","18","https://www.exploratorium.edu/visit/calendar/after-dark"],
 ["2026-08-27","6:00 PM","Thursday Night: discussion + performance","sfm","SF","AH","https://www.sfmoma.org/visit/thursday-nights/"],
 ["2026-08-27","6:00 PM","Time for Wine free concert (21+ facility)","clo","SC","AH","https://www.clos.com/Visiting/Events/Time-for-Wine-Concerts"],
+["2026-08-27","5:30 PM","CW Club: What Children Need to Thrive","cwc","SF","AH","https://www.commonwealthclub.org/events/2026-08-27/what-children-need-thrive-why-supporting-families-fundamental-improving-child"],
+["2026-08-27","7:00 PM","Kepler's: Greg Sarris — The Last Human Bear","kep","SM","AH","https://www.keplers.org/upcoming-events-internal/greg-sarris26"],
 ["2026-08-27","8:00 PM","Audium: Hidden Currents (final night)","aud","SF","AH","https://www.audium.org/"],
 ["2026-08-28","5:00 PM","Friday Nights at OMCA","omca","AL","AH","https://museumca.org/about-friday-nights-at-omca-with-off-the-grid/"],
 ["2026-08-28","5:55 PM","Alcatraz Night Tour (runs Tue–Sat)","alc","SF","AH","https://alcatrazcitycruises.com/tickets/alcatraz-night-tour"],
@@ -104,12 +122,55 @@ const E=[
 ["2026-08-29","5:00 PM","Sips on the Ship! (tasting evening)","hor","AL","AH","https://uss-hornet.org/event/sips-on-the-ship/"],
 ["2026-08-29","7:30 PM","Saturday Night Silent Films (live piano)","nil","AL","AH","https://nilesfilmmuseum.org/"],
 ["2026-08-29","7:30 PM","Free Telescope Viewing","cha","AL","AH","https://chabotspace.org/programs/free-telescope-viewings/"],
+["2026-08-31","5:30 PM","CW Club: Flicka on the Big Screen","cwc","SF","AH","https://www.commonwealthclub.org/events/2026-08-31/legacy-illuminated-flicka-big-screen"],
 ["2026-08-31","7:00 PM","Nerd Nite East Bay — 3 mini-lectures in a bar","upt","AL","21","https://sf.funcheap.com/event-series/nerd-nite-east-bay-geeky-lectures-bar-oakland/"]
 ].map(([d,t,n,vk,co,f,u,sea],i)=>({id:i,d,t,n,vk,v:V[vk][0],city:V[vk][1],ll:V[vk][2],cat:V[vk][3],co,f,u,sea:sea||null}));
 // sea: optional 8th element per event — "HW" (Halloween season) or "XM" (Christmas season)
 const SEASONS={HW:"🎃 Halloween",XM:"🎄 Christmas"};
+// 🏙 City spotlights — one per city with no dated event this month [name,city,co,lat,lng,note]
+const SPOT=[
+["Albany Bulb","Albany","AL",37.8886,-122.3197,"DIY art shoreline — best at sunset"],
+["Takara Sake Museum & Tasting Room","Berkeley","AL",37.8663,-122.2997,"only sake museum in the US; daily tastings"],
+["Dublin Heritage Park & Cemeteries","Dublin","AL",37.7096,-121.9312,"pioneer cemetery, schoolhouse & church museums"],
+["Public Market Emeryville","Emeryville","AL",37.8404,-122.2929,"food hall, open evenings"],
+["Hayward Japanese Gardens","Hayward","AL",37.6764,-122.0870,"oldest Japanese garden in California — free"],
+["Don Edwards Wildlife Refuge","Newark","AL",37.5320,-122.0670,"bayland levee trails at dusk"],
+["Piedmont Center for the Arts","Piedmont","AL",37.8235,-122.2316,"intimate chamber concerts"],
+["Museum on Main","Pleasanton","AL",37.6624,-121.8747,"local history + downtown 1st-Wednesday street parties"],
+["Casa Peralta","San Leandro","AL",37.7259,-122.1569,"1901 historic house museum"],
+["Union City Historical Museum","Union City","AL",37.5934,-122.0438,"local history collection"],
+["Ainsley House","Campbell","SC",37.2872,-121.9500,"1920s English-cottage museum"],
+["Fujitsu Planetarium at De Anza College","Cupertino","SC",37.3188,-122.0450,"public planetarium shows"],
+["Downtown Gilroy tasting rooms","Gilroy","SC",37.0058,-121.5683,"garlic-capital wine stroll"],
+["Los Altos History Museum","Los Altos","SC",37.3770,-122.1141,"free local history museum"],
+["Foothill Observatory","Los Altos Hills","SC",37.3614,-122.1276,"FREE Friday-night telescope viewing"],
+["NUMU — New Museum Los Gatos","Los Gatos","SC",37.2358,-121.9624,"open Thursdays until 8 PM"],
+["Alviso Adobe Park","Milpitas","SC",37.4460,-121.9070,"1830s adobe homestead"],
+["Steinbeck cottage site","Monte Sereno","SC",37.2364,-121.9900,"residential city, no public venues — literary drive-by"],
+["Morgan Hill Downtown Amphitheater","Morgan Hill","SC",37.1305,-121.6544,"free summer Friday-night music"],
+["Computer History Museum","Mountain View","SC",37.4143,-122.0774,"world's largest computing collection"],
+["Stanford Theatre","Palo Alto","SC",37.4446,-122.1607,"classics + live Wurlitzer organ, weekend double features"],
+["Hakone Estate & Gardens","Saratoga","SC",37.2542,-122.0367,"oldest Japanese estate garden in the western hemisphere"],
+["Historic Murphy Avenue","Sunnyvale","SC",37.3780,-122.0308,"evening restaurant row + Heritage Park Museum"],
+["Holbrook-Palmer Park","Atherton","SM",37.4585,-122.1970,"the town's one public gathering spot"],
+["Twin Pines Park & Manor","Belmont","SM",37.5202,-122.2758,"creekside park, summer concerts"],
+["Brisbane Marina","Brisbane","SM",37.6808,-122.3817,"skyline views under San Bruno Mountain"],
+["Burlingame Pez Museum","Burlingame","SM",37.5779,-122.3481,"⚠ verify still open before visiting"],
+["Cypress Lawn Memorial Park","Colma","SM",37.6740,-122.4630,"trolley tours of the City of the Dead"],
+["Cow Palace","Daly City","SM",37.7066,-122.4194,"event barn — future home of the Dickens Fair"],
+["Cooley Landing EcoCenter","East Palo Alto","SM",37.4744,-122.1310,"bayfront point at dusk"],
+["Leo Ryan Park","Foster City","SM",37.5554,-122.2662,"lagoon park, summer concert series"],
+["Flintstone House (I-280 viewpoint)","Hillsborough","SM",37.5613,-122.3762,"famous private oddity — viewable, not visitable"],
+["Millbrae Historical Museum","Millbrae","SM",37.6003,-122.3946,"local history"],
+["Winters Tavern + Pacifica Pier","Pacifica","SM",37.6108,-122.4880,"live-music dive bar; night fishing on the pier"],
+["Alpine Inn beer garden","Portola Valley","SM",37.3810,-122.2140,"1852 roadhouse — oldest continuously-run bar in CA"],
+["Courthouse Square","Redwood City","SM",37.4870,-122.2290,"Music on the Square Fridays + County History Museum"],
+["Junipero Serra Park","San Bruno","SM",37.6180,-122.4270,"sunset ridge picnic sites"],
+["Devil's Canyon Brewing","San Carlos","SM",37.5060,-122.2560,"Friday-night beer hall with food trucks; Hiller Aviation Museum nearby"],
+["Sign Hill","South San Francisco","SM",37.6616,-122.4270,"hike to the giant THE INDUSTRIAL CITY letters"]
+];
 const WEEKS=[{id:"w1",n:"Aug 10–16",from:"2026-08-10",to:"2026-08-16"},{id:"w2",n:"Aug 17–23",from:"2026-08-17",to:"2026-08-23"},{id:"w3",n:"Aug 24–31",from:"2026-08-24",to:"2026-08-31"}];
-const state={co:{SF:true,AL:true,SC:true,SM:true},cat:Object.fromEntries(Object.keys(CATS).map(k=>[k,true])),adultOnly:true,week:null,season:null,plan:[]};
+const state={co:{SF:true,AL:true,SC:true,SM:true},cat:Object.fromEntries(Object.keys(CATS).map(k=>[k,true])),adultOnly:true,week:null,season:null,spots:true,plan:[]};
 const FLAB={21:["21+","f21"],18:["18+","f18"],AH:["After hours","fah"],EV:["General","fev"]};
 const isAdult=e=>e.f!=="EV";
 function fmtDay(d){return new Date(d+"T12:00:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}
@@ -125,6 +186,9 @@ function drawChips(){chipsEl.innerHTML="";const v=visible();
  for(const k in CATS){const n=v.filter(e=>e.cat===k).length;const c=document.createElement("div");
   c.className="chip"+(state.cat[k]?" on":"");c.textContent=`${CATS[k]} (${n})`;
   c.onclick=()=>{state.cat[k]=!state.cat[k];render()};chipsEl.appendChild(c)}
+ const sp=document.createElement("div");sp.className="chip"+(state.spots?" on":"");
+ sp.textContent=`🏙 City spotlights (${SPOT.filter(s=>state.co[s[2]]).length})`;
+ sp.onclick=()=>{state.spots=!state.spots;render()};chipsEl.appendChild(sp);
  for(const k in SEASONS){const n=E.filter(e=>e.sea===k&&state.co[e.co]&&state.cat[e.cat]&&(!state.adultOnly||isAdult(e))&&inWeek(e)).length;
   if(!n&&state.season!==k)continue;const c=document.createElement("div");
   c.className="chip"+(state.season===k?" on":"");c.style.borderColor=k==="HW"?"#c47a2d":"#2d7a4f";
@@ -144,6 +208,10 @@ function drawMap(){if(!map)return;layer.clearLayers();const byVenue={};
  Object.values(byVenue).forEach(evs=>{const e=evs[0];
   const m=L.circleMarker(e.ll,{radius:9,fillColor:COUNTY[e.co].c,fillOpacity:.95,color:"#fff",weight:2});
   m.bindPopup(`<b>${e.v}</b><br>${e.city}<br>`+evs.map(x=>`${fmtDay(x.d)} ${x.t} — <a href="${x.u}" target="_blank">${x.n}</a> <a href="#" onclick="addPlan(${x.id});return false">＋plan</a>`).join("<br>"));
+  m.addTo(layer)});
+ if(state.spots)SPOT.forEach(([n,city,co,lat,lng,note])=>{if(!state.co[co])return;
+  const m=L.circleMarker([lat,lng],{radius:6,fillColor:"#14161d",fillOpacity:.85,color:COUNTY[co].c,weight:2,dashArray:"2,3"});
+  m.bindPopup(`<b>${n}</b><br>${city} — 🏙 city spotlight<br>${note}<br><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(n+" "+city+" CA")}" target="_blank">Map ↗</a> · <a href="https://www.google.com/search?q=${encodeURIComponent(n+" "+city+" events")}" target="_blank">Find events ↗</a>`);
   m.addTo(layer)})}
 function drawList(){const el=document.getElementById("list");el.innerHTML="";let last="";
  visible().sort((a,b)=>a.d.localeCompare(b.d)).forEach(e=>{
