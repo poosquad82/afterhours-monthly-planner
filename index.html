@@ -104,14 +104,16 @@ const E=[
 ["2026-08-29","5:00 PM","Sips on the Ship! (tasting evening)","hor","AL","AH","https://uss-hornet.org/event/sips-on-the-ship/"],
 ["2026-08-29","7:30 PM","Saturday Night Silent Films (live piano)","nil","AL","AH","https://nilesfilmmuseum.org/"],
 ["2026-08-29","7:30 PM","Free Telescope Viewing","cha","AL","AH","https://chabotspace.org/programs/free-telescope-viewings/"]
-].map(([d,t,n,vk,co,f,u],i)=>({id:i,d,t,n,vk,v:V[vk][0],city:V[vk][1],ll:V[vk][2],cat:V[vk][3],co,f,u}));
+].map(([d,t,n,vk,co,f,u,sea],i)=>({id:i,d,t,n,vk,v:V[vk][0],city:V[vk][1],ll:V[vk][2],cat:V[vk][3],co,f,u,sea:sea||null}));
+// sea: optional 8th element per event — "HW" (Halloween season) or "XM" (Christmas season)
+const SEASONS={HW:"🎃 Halloween",XM:"🎄 Christmas"};
 const WEEKS=[{id:"w1",n:"Aug 10–16",from:"2026-08-10",to:"2026-08-16"},{id:"w2",n:"Aug 17–23",from:"2026-08-17",to:"2026-08-23"},{id:"w3",n:"Aug 24–31",from:"2026-08-24",to:"2026-08-31"}];
-const state={co:{SF:true,AL:true,SC:true,SM:true},cat:Object.fromEntries(Object.keys(CATS).map(k=>[k,true])),adultOnly:true,week:null,plan:[]};
+const state={co:{SF:true,AL:true,SC:true,SM:true},cat:Object.fromEntries(Object.keys(CATS).map(k=>[k,true])),adultOnly:true,week:null,season:null,plan:[]};
 const FLAB={21:["21+","f21"],18:["18+","f18"],AH:["After hours","fah"],EV:["General","fev"]};
 const isAdult=e=>e.f!=="EV";
 function fmtDay(d){return new Date(d+"T12:00:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}
 function inWeek(e){if(!state.week)return true;const w=WEEKS.find(x=>x.id===state.week);return e.d>=w.from&&e.d<=w.to}
-function visible(){return E.filter(e=>state.co[e.co]&&state.cat[e.cat]&&(!state.adultOnly||isAdult(e))&&inWeek(e))}
+function visible(){return E.filter(e=>state.co[e.co]&&state.cat[e.cat]&&(!state.adultOnly||isAdult(e))&&inWeek(e)&&(state.season===null||e.sea===state.season))}
 const chipsEl=document.getElementById("chips"),weekEl=document.getElementById("weekChips");
 function drawChips(){chipsEl.innerHTML="";const v=visible();
  for(const k in COUNTY){const n=v.filter(e=>e.co===k).length;const c=document.createElement("div");
@@ -122,6 +124,10 @@ function drawChips(){chipsEl.innerHTML="";const v=visible();
  for(const k in CATS){const n=v.filter(e=>e.cat===k).length;const c=document.createElement("div");
   c.className="chip"+(state.cat[k]?" on":"");c.textContent=`${CATS[k]} (${n})`;
   c.onclick=()=>{state.cat[k]=!state.cat[k];render()};chipsEl.appendChild(c)}
+ for(const k in SEASONS){const n=E.filter(e=>e.sea===k&&state.co[e.co]&&state.cat[e.cat]&&(!state.adultOnly||isAdult(e))&&inWeek(e)).length;
+  if(!n&&state.season!==k)continue;const c=document.createElement("div");
+  c.className="chip"+(state.season===k?" on":"");c.style.borderColor=k==="HW"?"#c47a2d":"#2d7a4f";
+  c.textContent=`${SEASONS[k]} (${n})`;c.onclick=()=>{state.season=state.season===k?null:k;render()};chipsEl.appendChild(c)}
  weekEl.innerHTML='<span class="lbl">Week:</span>';
  const all=document.createElement("div");all.className="chip"+(state.week===null?" on":"");all.textContent="All month";
  all.onclick=()=>{state.week=null;render()};weekEl.appendChild(all);
