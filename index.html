@@ -29,7 +29,7 @@ h2{font-size:1rem;margin:4px 0 8px}.pi{font-size:.82rem;margin:5px 0;display:fle
 </head>
 <body>
 <header><h1>Adult Nights &amp; Venue Planner — September 2026</h1>
-<p class="sub">SF · Alameda · Santa Clara · San Mateo — museums, zoos, wineries, oddities. ⭐ filter defaults to adult/after-hours only. 🎃 Halloween season is LIVE — Fright Nights opens Sep 18, Nightfall at Filoli Sep 26. Double-click or ＋ an event to build your plan. <b>Build 2026-09-01-b (audited):</b> +16 events (Asian Art Thursdays, BAMPFA, Manny's talks), Fairyland Sep 25 removed (didn't exist), Lick marked sold out, After Dark Sep 24 theme confirmed.</p></header>
+<p class="sub">SF · Alameda · Santa Clara · San Mateo — museums, zoos, wineries, oddities. ⭐ filter defaults to adult/after-hours only. 🎃 Halloween season is LIVE — Fright Nights opens Sep 18, Nightfall at Filoli Sep 26. Double-click or ＋ an event to build your plan. <b>Build 2026-09-01-b (audited):</b> +16 events (Asian Art Thursdays, BAMPFA, Manny's talks), Fairyland Sep 25 corrected — it is Drawn Together (21+), not Fairyland for Grownups, Lick marked sold out, After Dark Sep 24 theme confirmed.</p></header>
 <div class="chips" id="chips"></div>
 <div class="chips" id="weekChips"></div>
 <div id="map"></div><p class="warn" id="mapwarn" style="display:none">Map failed to load — list still works.</p>
@@ -200,7 +200,8 @@ const E=[
 ["2026-09-23", "6:30 PM", "Manny's: Wealth and Taxes", "man", "SF", "AH", "https://www.eventbrite.com/e/wealth-and-taxes-how-do-the-rich-avoid-paying-their-fair-share-tickets-1989050416339"],
 ["2026-09-26", "6:30 PM", "Manny's: Monthly SF Politics Club", "man", "SF", "AH", "https://www.eventbrite.com/e/monthly-san-francisco-politics-club-mannys-tickets-1974935633644"],
 ["2026-09-28", "6:30 PM", "Manny's: AI Transition Week (4 sessions thru Oct 1)", "man", "SF", "AH", "https://welcometomannys.com/events"],
-["2026-09-20", "4:00 PM", "Kepler's: Charles Hood — Acorns in a Nutshell (free)", "kep", "SM", "EV", "https://www.keplers.org/events-in-person"]
+["2026-09-20", "4:00 PM", "Kepler's: Charles Hood — Acorns in a Nutshell (free)", "kep", "SM", "EV", "https://www.keplers.org/events-in-person"],
+["2026-09-25", "6:00 PM", "Drawn Together — 21+ after-hours art night at Fairyland", "fai", "AL", "21", "https://fairyland.org/upcoming-events/"]
 ].map(([d,t,n,vk,co,f,u,sea],i)=>({id:i,d,t,n,vk,v:V[vk][0],city:V[vk][1],ll:V[vk][2],cat:V[vk][3],co,f,u,sea:sea||null}));
 // sea: optional 8th element per event — "HW" (Halloween season) or "XM" (Christmas season)
 const SEASONS={HW:"🎃 Halloween",XM:"🎄 Christmas"};
